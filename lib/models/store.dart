@@ -4,58 +4,43 @@ import 'package:flutter/material.dart';
 
 class Store {
   List callbackStack = [];
-
   String name = 'Peter Parker';
+
   String getName() => name;
 
-  // static void onUpdate(cb) {
-  //   callbackStack.add(cb);
-  // }
+  void onUpdate(cb) {
+    this.callbackStack.add(cb);
+  }
 
-  void updateName(value) {
-    log('value - ' + value);
-    this.name = value;
+  void emitUpdate() {
     for (var i = 0; i < callbackStack.length; i++) {
       callbackStack[i]();
     }
   }
+
+  void updateName(value) {
+    this.name = value;
+    emitUpdate();
+  }
 }
 
 class Provider extends InheritedWidget {
-  static Store _store = Store();
-  Provider({Widget child, Store store}) : super(child: child);
+  Store store = Store();
+  Provider({Widget child, initValue}) : super(child: child) {
+    store.updateName(initValue);
+  }
 
   @override
   bool updateShouldNotify(Provider oldWidget) {
-    return false;
+    return store.name != oldWidget.store.name;
   }
 
-  // static Provider of(BuildContext context, cb) {
-  //   Store.callbackStack.add(cb);
-  //   return context.inheritFromWidgetOfExactType(Provider);
-  // }
-  static Store getStore(cb) {
-    _store.callbackStack.add(cb);
-    return _store;
+  static Store of(BuildContext context, cb) {
+    return context.dependOnInheritedWidgetOfExactType<Provider>().getStore(cb);
+  }
+
+  Store getStore(cb) {
+    store.onUpdate(cb);
+    return store;
   }
 }
-
-// class Store extends ChangeNotifier {
-//   String name = 'Peter Parker';
-//   String getName() => name;
-//   static void setReloader(cb) {
-//     instanceCallbackStack.add(cb);
-//   }
-
-//   static List instanceCallbackStack = [];
-//   Store(cb) {
-//     instanceCallbackStack.add(cb);
-//   }
-
-//   void updateName(value) {
-//     this.name = value;
-//     for (var i=0; i<instanceCallbackStack.length; i++) {
-//       instanceCallbackStack[i]();
-//     }
-//   }
-// }
