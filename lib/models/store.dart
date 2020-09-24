@@ -25,24 +25,18 @@ class Store {
 }
 
 class Provider extends InheritedWidget {
-  Store store = Store();
+  final Store store = Store();
   Provider({Widget child, initValue}) : super(child: child) {
     store.updateName(initValue);
   }
-
   @override
-  bool updateShouldNotify(Provider oldWidget) {
-    return store.name != oldWidget.store.name;
+  bool updateShouldNotify(Widget oldWidget) {
+    return false;
   }
 
-  static Store of(BuildContext context, Function cb) {
+  static Store of(BuildContext context) {
     Provider currentInstace =
         context.dependOnInheritedWidgetOfExactType<Provider>();
-    currentInstace.setCallBack(cb);
     return currentInstace.store;
-  }
-
-  void setCallBack(cb) {
-    store.onUpdate(cb);
   }
 }

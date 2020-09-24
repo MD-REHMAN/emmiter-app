@@ -46,8 +46,8 @@ class Comp1 extends StatefulWidget {
 class _Comp1State extends State<Comp1> {
   @override
   Widget build(BuildContext context) {
-    Store store = Provider.of(context, () => setState(() {}));
-
+    Store store = Provider.of(context);
+    store.onUpdate(() => setState(() {}));
     return Row(children: [
       Text(store.getName()),
       FlatButton(
@@ -72,7 +72,7 @@ class Comp2 extends StatefulWidget {
 class _Comp2State extends State<Comp2> {
   @override
   Widget build(BuildContext context) {
-  Store store = Provider.of(context, () => setState(() {}));
+    Store store = Provider.of(context, () => setState(() {}));
 
     return Row(children: [
       Text(store.getName()),
