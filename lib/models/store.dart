@@ -35,12 +35,14 @@ class Provider extends InheritedWidget {
     return store.name != oldWidget.store.name;
   }
 
-  static Store of(BuildContext context, cb) {
-    return context.dependOnInheritedWidgetOfExactType<Provider>().getStore(cb);
+  static Store of(BuildContext context, Function cb) {
+    Provider currentInstace =
+        context.dependOnInheritedWidgetOfExactType<Provider>();
+    currentInstace.setCallBack(cb);
+    return currentInstace.store;
   }
 
-  Store getStore(cb) {
+  void setCallBack(cb) {
     store.onUpdate(cb);
-    return store;
   }
 }
