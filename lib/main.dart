@@ -9,25 +9,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.cyan,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: Scaffold(
-          appBar: AppBar(title: Text('Shopping Mart')),
-          body: Center(
-            child: Row(
-              children: <Widget>[Comp1(), Text('                  '), Comp2()],
+    return Provider(
+
+        child: MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.cyan,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-          ),
-          floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Store.updateName("Who's that?");
-              },
-              child: Icon(Icons.add_outlined)),
-        ));
+            home: Scaffold(
+              appBar: AppBar(title: Text('Shopping Mart')),
+              body: Center(
+                child: Row(
+                  children: <Widget>[
+                    Comp1(),
+                    Text('                  '),
+                    Comp2(),
+                  ],
+                ),
+              ),
+              floatingActionButton: FloatingActionButton(
+                  onPressed: () {}, child: Icon(Icons.add_outlined)),
+            )));
   }
 }
 
@@ -41,7 +44,21 @@ class _Comp1State extends State<Comp1> {
   // Store store = Store();
   @override
   Widget build(BuildContext context) {
-    Store store = Store(() => setState(() {}));
+    // var some = context.inheritFromWidgetOfExactType(Provider).store;
+
+
+
+    // Store store = Provider.of(context, ()=>setState(() {})).store;
+    // Store store = Provider.store;
+    Store store = Provider.getStore(()=>setState(() {}));
+
+    
+    
+    
+    // Store of(BuildContext context) =>
+    //     context.inheritFromWidgetOfExactType(Provider) as Store;
+    // var some = context.getElementForInheritedWidgetOfExactType<Provider>();
+    // Store store = Store();
     // Store.setReloader(() => setState(() {}));
     return Row(children: [
       Text(store.getName()),
@@ -51,7 +68,8 @@ class _Comp1State extends State<Comp1> {
         padding: EdgeInsets.all(18.0),
         splashColor: Colors.blueAccent,
         onPressed: () {
-          Store.updateName('Peter Parker');
+          store.updateName('Peter Parker');
+          // setState(() {});
         },
         child: Text('Remove Mask'),
       )
@@ -67,7 +85,14 @@ class Comp2 extends StatefulWidget {
 class _Comp2State extends State<Comp2> {
   @override
   Widget build(BuildContext context) {
-    Store store = Store(() => setState(() {}));
+
+
+
+    // Store store = Provider.of(context, ()=>setState(() {})).store;
+    Store store = Provider.getStore(()=>setState(() {}));
+
+
+    // Store store = Store();
     return Row(children: [
       Text(store.getName()),
       FlatButton(
@@ -76,7 +101,7 @@ class _Comp2State extends State<Comp2> {
         padding: EdgeInsets.all(18.0),
         splashColor: Colors.blueAccent,
         onPressed: () {
-          Store.updateName('Spider Man');
+          store.updateName('Spider Man');
           // _Comp1State.setState();
           // setState(() {});
         },
